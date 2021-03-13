@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,7 +45,6 @@
 			right: 0;
 			left: 0;
 			top: 0;
-			transition: opacity .2s ease-in-out;
 		}
 		.videoList__item[data-action="play"]:hover iframe {
 			opacity: 1;
@@ -56,16 +55,24 @@
 <body>
 	<div class="videoList">
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/3IWxI7v1VAc/maxresdefault.jpg)">
-			<div data-video-id="3IWxI7v1VAc"></div>
+			<div data-video id="3IWxI7v1VAc"></div>
 		</div>
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/i-h5apHUnJU/maxresdefault.jpg)">
-			<div data-video-id="i-h5apHUnJU"></div>
+			<div data-video id="i-h5apHUnJU"></div>
 		</div>
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/LGMB67gwQEY/maxresdefault.jpg)">
-			<div data-video-id="LGMB67gwQEY"></div>
+			<div data-video id="LGMB67gwQEY"></div>
 		</div>
 	</div>
 
-	<script src="index.js"></script>
+	<script src="control-video-frames.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			controlVideoFrames('.js-video-element', {
+				minWidth: 992,
+				timeout: 4000
+			});
+		});
+	</script>
 </body>
 </html>

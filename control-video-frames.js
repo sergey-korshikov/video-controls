@@ -2,27 +2,30 @@
 const playerConfig = {};
 
 // инициализация видео-роликов и событий для них
-function initVideos() {
-	if (window.innerWidth < 992) return false;
+function controlVideoFrames(selector, options) {
+	if (window.innerWidth < options.minWidth) return false;
 
-	const videos = document.querySelectorAll('.js-video-element');
+	const videos = document.querySelectorAll(selector);
 
 	for (let i = 0; i < videos.length; i++) {
 		const videoWrap = videos[i];
-		const video = videoWrap.querySelector('[data-video-id]');
-		const id = video.getAttribute('data-video-id');
+		const video = videoWrap.querySelector('[data-video]');
+		const id = video.getAttribute('id');
+
+		if (videoWrap.classList.contains('inited')) return false;
+
+		videoWrap.classList.add('inited');
 
 		if (!playerConfig.list) {
 			playerConfig.list = {};
 		}
 
 		playerConfig.list[id] = {
-			index: i,
 			wrap: videoWrap
 		};
 
 		videoWrap.onmouseover = function() {
-			if (window.innerWidth < 992) return false;
+			if (window.innerWidth < options.minWidth) return false;
 
 			playerConfig.list[id].play = true;
 
@@ -52,7 +55,7 @@ function initVideos() {
 			} else if (playerConfig.APIReady) {
 				checkInitVideoFrames();
 			}
-		}, 4000);
+		}, options.timeout);
 	}
 }
 
@@ -82,19 +85,16 @@ function checkInitVideoFrames() {
 			!element.wrap.getAttribute('data-id') &&
 			(playerConfig.endTimeout || element.play !== undefined)
 		) {
-			initVideoFrame(element.index, id, element.wrap);
+			initVideoFrame(id, element.wrap);
 		}
 	}
 }
 
 // инициализация фреймов с помощью api youtube
-function initVideoFrame(i, id, videoWrap) {
-	const video = videoWrap.querySelector('[data-video-id]');
-
+function initVideoFrame(id, videoWrap) {
 	videoWrap.setAttribute('data-id', id);
-	video.setAttribute('id', 'player-' + i);
 
-	playerConfig.list[id].player = new YT.Player('player-' + i, {
+	playerConfig.list[id].player = new YT.Player(id, {
 		height: '360',
 		width: '640',
 		videoId: id,
@@ -136,7 +136,3 @@ function initVideoFrame(i, id, videoWrap) {
 		}
 	}
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-	initVideos();
-});
