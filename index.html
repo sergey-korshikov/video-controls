@@ -55,13 +55,22 @@
 <body>
 	<div class="videoList">
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/3IWxI7v1VAc/maxresdefault.jpg)">
-			<div data-video id="3IWxI7v1VAc"></div>
+			<div data-video data-id="3IWxI7v1VAc"></div>
 		</div>
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/i-h5apHUnJU/maxresdefault.jpg)">
-			<div data-video id="i-h5apHUnJU"></div>
+			<div data-video data-id="i-h5apHUnJU"></div>
 		</div>
 		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/LGMB67gwQEY/maxresdefault.jpg)">
-			<div data-video id="LGMB67gwQEY"></div>
+			<div data-video data-id="LGMB67gwQEY"></div>
+		</div>
+		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/3IWxI7v1VAc/maxresdefault.jpg)">
+			<div data-video data-id="3IWxI7v1VAc"></div>
+		</div>
+		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/i-h5apHUnJU/maxresdefault.jpg)">
+			<div data-video data-id="i-h5apHUnJU"></div>
+		</div>
+		<div class="videoList__item js-video-element" style="background-image: url(//img.youtube.com/vi/LGMB67gwQEY/maxresdefault.jpg)">
+			<div data-video data-id="LGMB67gwQEY"></div>
 		</div>
 	</div>
 
@@ -70,7 +79,7 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			controlVideoFrames('.js-video-element', {
 				minWidth: 992,
-				// timeout: 1000
+				// timeout: 2000
 			});
 		});
 	</script>

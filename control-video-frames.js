@@ -1,33 +1,34 @@
 // список роликов и св-ва для них
-const playerConfig = {};
+const playerConfig = {
+	list: {}
+};
 
 // инициализация видео-роликов и событий для них
 function controlVideoFrames(selector, options) {
 	if (window.innerWidth < options.minWidth) return false;
 
 	const videos = document.querySelectorAll(selector);
+	const dateNow = Date.now();
 
 	for (let i = 0; i < videos.length; i++) {
 		const videoWrap = videos[i];
 		const video = videoWrap.querySelector('[data-video]');
-		const id = video.getAttribute('id');
+		const id = video.getAttribute('data-id');
+		const uniqueId = dateNow + i;
 
 		if (videoWrap.classList.contains('inited')) return false;
 
-		videoWrap.classList.add('inited');
-
-		if (!playerConfig.list) {
-			playerConfig.list = {};
-		}
-
-		playerConfig.list[id] = {
+		playerConfig.list[uniqueId] = {
+			id: id,
 			wrap: videoWrap
 		};
+
+		videoWrap.classList.add('inited');
 
 		videoWrap.onmouseover = function() {
 			if (window.innerWidth < options.minWidth) return false;
 
-			playerConfig.list[id].play = true;
+			playerConfig.list[uniqueId].play = true;
 
 			if (!playerConfig.initYoutubeAPI) {
 				initYoutubeAPI();
@@ -35,16 +36,16 @@ function controlVideoFrames(selector, options) {
 				checkInitVideoFrames();
 			}
 
-			if (playerConfig.list[id].inited) {
-				playerConfig.list[id].player.playVideo();
+			if (playerConfig.list[uniqueId].inited) {
+				playerConfig.list[uniqueId].player.playVideo();
 			}
 		}
 
 		videoWrap.onmouseout = function() {
-			playerConfig.list[id].play = false;
+			playerConfig.list[uniqueId].play = false;
 
-			if (playerConfig.list[id].inited) {
-				playerConfig.list[id].player.pauseVideo();
+			if (playerConfig.list[uniqueId].inited) {
+				playerConfig.list[uniqueId].player.pauseVideo();
 			}
 		}
 
@@ -81,22 +82,26 @@ function onYouTubeIframeAPIReady() {
 
 // проверка инициализации фреймов
 function checkInitVideoFrames() {
-	for (const id in playerConfig.list) {
-		const element = playerConfig.list[id];
+	for (const uniqueId in playerConfig.list) {
+		const element = playerConfig.list[uniqueId];
+		const id = element.id;
 		if (
 			!element.wrap.getAttribute('data-id') &&
 			(playerConfig.endTimeout || element.play !== undefined)
 		) {
-			initVideoFrame(id, element.wrap);
+			initVideoFrame(uniqueId, id, element.wrap);
 		}
 	}
 }
 
 // инициализация фреймов с помощью api youtube
-function initVideoFrame(id, videoWrap) {
-	videoWrap.setAttribute('data-id', id);
+function initVideoFrame(uniqueId, id, videoWrap) {
+	const video = videoWrap.querySelector('[data-video]');
 
-	playerConfig.list[id].player = new YT.Player(id, {
+	videoWrap.setAttribute('data-id', id);
+	video.setAttribute('id', uniqueId);
+
+	playerConfig.list[uniqueId].player = new YT.Player(uniqueId, {
 		height: '360',
 		width: '640',
 		videoId: id,
@@ -119,9 +124,9 @@ function initVideoFrame(id, videoWrap) {
 	});
 
 	function onPlayerReady(e) {
-		playerConfig.list[id].inited = true;
-		playerConfig.list[id].player.mute();
-		if (playerConfig.list[id].play) playerConfig.list[id].player.playVideo();
+		playerConfig.list[uniqueId].inited = true;
+		playerConfig.list[uniqueId].player.mute();
+		if (playerConfig.list[uniqueId].play) playerConfig.list[uniqueId].player.playVideo();
 	}
 
 	function onPlayerStateChange(e) {
