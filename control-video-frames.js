@@ -48,14 +48,16 @@ function controlVideoFrames(selector, options) {
 			}
 		}
 
-		setTimeout(function() {
-			playerConfig.endTimeout = true;
-			if (!playerConfig.initYoutubeAPI) {
-				initYoutubeAPI();
-			} else if (playerConfig.APIReady) {
-				checkInitVideoFrames();
-			}
-		}, options.timeout);
+		if (options.timeout !== undefined) {
+			setTimeout(function() {
+				playerConfig.endTimeout = true;
+				if (!playerConfig.initYoutubeAPI) {
+					initYoutubeAPI();
+				} else if (playerConfig.APIReady) {
+					checkInitVideoFrames();
+				}
+			}, options.timeout);
+		}
 	}
 }
 
